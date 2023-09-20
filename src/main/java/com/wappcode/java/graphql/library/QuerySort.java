@@ -3,7 +3,7 @@ package com.wappcode.java.graphql.library;
 import java.util.List;
 import java.util.Map;
 import com.wappcode.java.graphql.models.SortGroupInput;
-import com.wappcode.java.graphql.models.SortType;
+import com.wappcode.java.graphql.models.SortDirection;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.From;
 import jakarta.persistence.criteria.Join;
@@ -41,7 +41,7 @@ public class QuerySort<T> {
         String joinedProperty = sorting.getOnJoinedProperty();
         Order order;
         From<?, ?> from = getFrom(joinedProperty);
-        if (sorting.getDirection().equals(SortType.DESC)) {
+        if (sorting.getDirection().equals(SortDirection.DESC)) {
             order = cb.desc(from.get(property));
         } else {
             order = cb.asc(from.get(property));

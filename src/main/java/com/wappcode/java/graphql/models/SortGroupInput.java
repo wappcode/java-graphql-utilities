@@ -2,22 +2,22 @@ package com.wappcode.java.graphql.models;
 
 public class SortGroupInput {
     String property;
-    SortType direction;
+    SortDirection direction;
     String onJoinedProperty;
 
-    public SortGroupInput(String property, SortType direction) {
+    public SortGroupInput(String property, SortDirection direction) {
         this.property = property;
         this.direction = direction;
     }
 
-    public SortGroupInput(String property, SortType direction, String onJoinedProperty) {
+    public SortGroupInput(String property, SortDirection direction, String onJoinedProperty) {
         this.property = property;
         this.direction = direction;
         this.onJoinedProperty = onJoinedProperty;
     }
 
     public SortGroupInput() {
-        this.direction = SortType.ASC;
+        this.direction = SortDirection.ASC;
     }
 
     public String getProperty() {
@@ -28,11 +28,11 @@ public class SortGroupInput {
         this.property = property;
     }
 
-    public SortType getDirection() {
+    public SortDirection getDirection() {
         return direction;
     }
 
-    public void setDirection(SortType direction) {
+    public void setDirection(SortDirection direction) {
         this.direction = direction;
     }
 
