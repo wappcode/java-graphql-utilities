@@ -13,7 +13,7 @@
 
   <groupId>com.wappcode.java.graphql</groupId>
   <artifactId>gql-utilities</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2-SNAPSHOT</version>
 
   <name>com.wappcode.java.graphql:gql-utilities</name>
   <url>https://github.com/wappcode/java-graphql-utilities</url>
