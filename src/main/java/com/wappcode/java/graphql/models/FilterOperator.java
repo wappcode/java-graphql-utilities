@@ -12,5 +12,7 @@ public enum FilterOperator {
     NOT_LIKE,
     IN,
     NOT_IN,
+    IS_NULL,
+    IS_NOT_NULL,
 
 }

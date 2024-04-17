@@ -68,14 +68,44 @@ public class QueryFilter<T> {
         if (operator == FilterOperator.LIKE) {
             return cb.like(from.get(property), value);
         }
+        if (operator == FilterOperator.NOT_LIKE) {
+            return cb.notLike(from.get(property), value);
+        }
         if (operator == FilterOperator.EQUAL) {
             return cb.equal(from.get(property), value);
+        }
+        if (operator == FilterOperator.NOT_EQUAL) {
+            return cb.notEqual(from.get(property), value);
         }
         if (operator == FilterOperator.IN) {
             return from.get(property).in(values);
         }
+        if (operator == FilterOperator.NOT_IN) {
+            return cb.not(from.get(property).in(values));
+        }
         if (operator == FilterOperator.BETWEEN) {
             return cb.between(from.get(property), values.get(0), values.get(1));
+        }
+        if (operator == FilterOperator.GREATER_THAN) {
+            return cb.greaterThan(from.get(property), value);
+        }
+        if (operator == FilterOperator.GREATER_EQUAL_THAN) {
+            return cb.greaterThanOrEqualTo(from.get(property), value);
+        }
+        if (operator == FilterOperator.LESS_THAN) {
+            return cb.lessThan(from.get(property), value);
+        }
+        if (operator == FilterOperator.LESS_EQUAL_THAN) {
+            return cb.lessThanOrEqualTo(from.get(property), value);
+        }
+        if (operator == FilterOperator.NOT_LIKE) {
+            return cb.notLike(from.get(property), value);
+        }
+        if (operator == FilterOperator.IS_NULL) {
+            return cb.isNull(from.get(property));
+        }
+        if (operator == FilterOperator.IS_NOT_NULL) {
+            return cb.isNotNull(from.get(property));
         }
 
         return null;
