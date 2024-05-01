@@ -1,7 +1,7 @@
 # Release notes.
 
 ./mvnw clean
-./mvnw build o ./mvnw install
+./mvnw compile o ./mvnw install
 
 Agregar accesos y claves de la cuenta del repositorio ossrh
 ver instrucciones para obtener el token
@@ -31,3 +31,36 @@ ejecutar los giuientes comandos en la misma terminal
 
 GPG_TTY=$(tty)
 export GPG_TTY
+
+Despues del deploy hay que ingresar a https://s01.oss.sonatype.org/
+
+Y en staging repositories hay seleccionar y cerrar el repositorio despues que el proceso de cierre concluya (no es inmediato puede tomar algunos minutos) hay que seleccionarlo nuevamente y presionar el botón release
+
+## Las páginas con información para deploy son
+
+https://maven.apache.org/repository/guide-central-repository-upload.html
+https://central.sonatype.org/publish/publish-guide/
+https://central.sonatype.org/publish/publish-maven/
+
+## ejemplo archivo ~/.m2/settings.xml
+
+```
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <localRepository/>
+  <interactiveMode/>
+  <offline/>
+  <pluginGroups/>
+  <servers>
+<server>
+  <id>ossrh</id>
+  <username>orssh_username</username>
+  <password>orssh_password</password>
+</server>
+  </servers>
+  <mirrors/>
+  <proxies/>
+  <profiles/>
+  <activeProfiles/>
+</settings>
+```
