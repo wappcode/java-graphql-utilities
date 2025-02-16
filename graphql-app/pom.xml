@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.wappcode.java</groupId>
+        <groupId>com.wappcode.java.graphql</groupId>
         <artifactId>graphql-parent</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -14,9 +14,9 @@
     <dependencies>
         <!-- Dependency on the library module -->
         <dependency>
-            <groupId>com.wappcode.java</groupId>
-            <artifactId>graphql-utilities</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.wappcode.java.graphql</groupId>
+            <artifactId>gql-utilities</artifactId>
+            <version>1.0.6</version>
         </dependency>
 
         <!-- Spring Boot dependencies -->

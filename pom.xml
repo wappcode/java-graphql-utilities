@@ -3,17 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.wappcode.java</groupId>
+	<groupId>com.wappcode.java.graphql</groupId>
 	<artifactId>graphql-parent</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging> <!-- Parent projects use 'pom' packaging -->
 
 	<modules>
-		<module>graphql-utilities</module> <!-- List of child modules -->
+		<module>gql-utilities</module> <!-- List of child modules -->
 		<module>graphql-app</module>
 	</modules>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
