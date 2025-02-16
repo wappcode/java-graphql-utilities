@@ -10,8 +10,44 @@
     </parent>
 
     <artifactId>gql-utilities</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7-SNAPSHOT</version>
 
+    <name>com.wappcode.java.graphql:gql-utilities</name>
+    <url>https://github.com/wappcode/java-graphql-utilities</url>
+    <description>
+    Utilities for graphql on Spring Boot.
+    Create JPA Queries to filtering and sorting from graphql args
+  </description>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Jesus Abarca</name>
+            <email>jesus.abarca.g@gmail.com</email>
+            <organization>wappcode</organization>
+            <organizationUrl>https://github.com/wappcode</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/wappcode/java-graphql-utilities.git</connection>
+        <developerConnection>scm:git:ssh://github.com:wappcode/java-graphql-utilities.git</developerConnection>
+        <url>https://github.com/wappcode/java-graphql-utilities</url>
+        <tag>1.0.4</tag>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -19,4 +55,79 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be
+            moved to
+      parent pom) -->
+            <plugins>
+
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.7</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.7</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+
+                <!-- clean lifecycle, see
+        https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <!-- default lifecycle, jar packaging: see
+                https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <!-- site lifecycle, see
+        https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
