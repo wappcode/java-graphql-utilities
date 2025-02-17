@@ -1,5 +1,8 @@
 package com.wappcode.java.graphql.library;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +16,7 @@ import jakarta.persistence.criteria.From;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.Attribute;
 
 public class QueryFilter<T> {
     private CriteriaBuilder cb;
@@ -59,17 +63,32 @@ public class QueryFilter<T> {
         return groupPredicate;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Predicate createConditionPredicate(FilterConditionInput condition) {
         FilterOperator operator = condition.getFilterOperator();
         From<?, ?> from = getFrom(condition.getOnJoinedProperty());
         String property = condition.getProperty();
-        String value = condition.getValue().getSingle();
-        List<String> values = condition.getValue().getMany();
+        String rawValue = condition.getValue().getSingle();
+
+        Attribute<?, ?> attribute = root.getModel().getAttribute(property);
+        Class<?> attributeType = attribute.getJavaType();
+        if (rawValue == null) {
+            rawValue = "";
+        }
+        List<String> rawvalues = condition.getValue().getMany();
+        if (rawvalues == null) {
+            rawvalues = List.of("");
+        }
+        var value = standardizeFilterValue(rawValue, attributeType);
+
+        List<?> values = rawvalues.stream()
+                .map(v -> (standardizeFilterValue(v, attributeType)))
+                .toList();
         if (operator == FilterOperator.LIKE) {
-            return cb.like(from.get(property), value);
+            return cb.like(from.get(property), (String) value);
         }
         if (operator == FilterOperator.NOT_LIKE) {
-            return cb.notLike(from.get(property), value);
+            return cb.notLike(from.get(property), (String) value);
         }
         if (operator == FilterOperator.EQUAL) {
             return cb.equal(from.get(property), value);
@@ -84,23 +103,22 @@ public class QueryFilter<T> {
             return cb.not(from.get(property).in(values));
         }
         if (operator == FilterOperator.BETWEEN) {
-            return cb.between(from.get(property), values.get(0), values.get(1));
+            return cb.between(from.get(property), (Comparable) values.get(0),
+                    (Comparable) values.get(1));
         }
         if (operator == FilterOperator.GREATER_THAN) {
-            return cb.greaterThan(from.get(property), value);
+            return cb.greaterThan(from.get(property), (Comparable) value);
         }
         if (operator == FilterOperator.GREATER_EQUAL_THAN) {
-            return cb.greaterThanOrEqualTo(from.get(property), value);
+            return cb.greaterThanOrEqualTo(from.get(property), (Comparable) value);
         }
         if (operator == FilterOperator.LESS_THAN) {
-            return cb.lessThan(from.get(property), value);
+            return cb.lessThan(from.get(property), (Comparable) value);
         }
         if (operator == FilterOperator.LESS_EQUAL_THAN) {
-            return cb.lessThanOrEqualTo(from.get(property), value);
+            return cb.lessThanOrEqualTo(from.get(property), (Comparable) value);
         }
-        if (operator == FilterOperator.NOT_LIKE) {
-            return cb.notLike(from.get(property), value);
-        }
+
         if (operator == FilterOperator.IS_NULL) {
             return cb.isNull(from.get(property));
         }
@@ -119,4 +137,37 @@ public class QueryFilter<T> {
             return joins.get(joinedProperty);
         }
     }
+
+    @SuppressWarnings({ "unchecked", "hiding" })
+    private <T> T standardizeFilterValue(String value, Class<T> valueClass) {
+        if (valueClass == Boolean.class) {
+            return value.equals("1") ? (T) Boolean.TRUE : (T) Boolean.FALSE;
+        }
+        if (valueClass == Integer.class) {
+            return (T) Integer.valueOf(value);
+        }
+        if (valueClass == Long.class) {
+            return (T) Long.valueOf(value);
+        }
+        if (valueClass == Double.class) {
+            return (T) Double.valueOf(value);
+        }
+        if (valueClass == Float.class) {
+            return (T) Float.valueOf(value);
+        }
+        if (valueClass == Short.class) {
+            return (T) Short.valueOf(value);
+        }
+        if (valueClass == Byte.class) {
+            return (T) Byte.valueOf(value);
+        }
+        if (valueClass == Date.class) {
+            ZonedDateTime valueDateTime = ZonedDateTime.parse(value, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            Date date = Date.from(valueDateTime.toInstant());
+            return (T) date;
+
+        }
+        return (T) value;
+    }
+
 }
