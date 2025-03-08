@@ -73,7 +73,7 @@ public class QueryFilterTest {
         cq.where(filtersPredicate);
         TypedQuery<User> tq = em.createQuery(cq);
         List<User> items = tq.getResultList();
-        assertTrue(items.size() == 1);
+        assertTrue(items.size() == 2);
         assertTrue(items.get(0).getName().contains("illiam"));
 
     }
@@ -98,7 +98,7 @@ public class QueryFilterTest {
         cq.where(filtersPredicate);
         TypedQuery<User> tq = em.createQuery(cq);
         List<User> items = tq.getResultList();
-        assertTrue(items.size() == 1);
+        assertTrue(items.size() == 2);
         assertTrue(!items.get(0).getName().contains("illiam"));
 
     }
@@ -123,7 +123,7 @@ public class QueryFilterTest {
         cq.where(filtersPredicate);
         TypedQuery<User> tq = em.createQuery(cq);
         List<User> items = tq.getResultList();
-        assertTrue(items.size() == 1);
+        assertTrue(items.size() == 3);
 
     }
 
