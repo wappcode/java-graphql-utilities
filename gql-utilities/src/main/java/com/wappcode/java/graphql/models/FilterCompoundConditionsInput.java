@@ -2,8 +2,6 @@ package com.wappcode.java.graphql.models;
 
 import java.util.List;
 
-import com.wappcode.java.graphql.models.FilterLogic;
-
 public class FilterCompoundConditionsInput {
     FilterLogic conditionsLogic;
     List<FilterConditionInput> conditions;

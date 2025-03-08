@@ -13,6 +13,7 @@ import com.wappcode.java.graphql.entities.User;
 import com.wappcode.java.graphql.models.FilterCompoundConditionsInput;
 import com.wappcode.java.graphql.models.FilterConditionInput;
 import com.wappcode.java.graphql.models.FilterGroupInput;
+import com.wappcode.java.graphql.models.FilterLogic;
 import com.wappcode.java.graphql.models.FilterOperator;
 import com.wappcode.java.graphql.models.FilterValue;
 
@@ -136,18 +137,26 @@ public class QueryFilterTest {
 
         var filterGroup = new FilterGroupInput();
         var filterCompound = new FilterCompoundConditionsInput();
-        var conditions = new FilterConditionInput();
+
+        var conditionIn = new FilterConditionInput();
         var filterValue = new FilterValue();
         filterValue.setMany(List.of("1"));
-        conditions.setFilterOperator(FilterOperator.IN);
-        conditions.setProperty("active");
-        conditions.setValue(filterValue);
-        filterGroup.setConditions(List.of(conditions));
+        conditionIn.setFilterOperator(FilterOperator.IN);
+        conditionIn.setProperty("active");
+        var conditionLike = new FilterConditionInput();
+        conditionLike.setProperty("name");
+        conditionLike.setFilterOperator(FilterOperator.LIKE);
+        conditionLike.setValue(new FilterValue("%William%"));
+        conditionIn.setValue(filterValue);
+        filterCompound.setConditionsLogic(FilterLogic.OR);
+        filterCompound.setConditions(List.of(conditionIn, conditionLike));
+        filterGroup.setCompoundConditions(List.of(filterCompound));
         var filtersPredicate = queryFilter.createPredicate(List.of(filterGroup));
         cq.where(filtersPredicate);
         TypedQuery<User> tq = em.createQuery(cq);
         List<User> items = tq.getResultList();
-        assertTrue(items.size() == 1);
+
+        assertTrue(items.size() == 4);
 
     }
     // TODO: Add test to compare dates and numbers with between and greater than,
