@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.wappcode.java.graphql.GraphqlApplication;
 import com.wappcode.java.graphql.entities.User;
+import com.wappcode.java.graphql.models.FilterCompoundConditionsInput;
 import com.wappcode.java.graphql.models.FilterConditionInput;
 import com.wappcode.java.graphql.models.FilterGroupInput;
 import com.wappcode.java.graphql.models.FilterOperator;
@@ -110,6 +111,31 @@ public class QueryFilterTest {
         var queryFilter = new QueryFilter<>(cb, root, null);
 
         var filterGroup = new FilterGroupInput();
+        var conditions = new FilterConditionInput();
+        var filterValue = new FilterValue();
+        filterValue.setMany(List.of("1"));
+        conditions.setFilterOperator(FilterOperator.IN);
+        conditions.setProperty("active");
+        conditions.setValue(filterValue);
+        filterGroup.setConditions(List.of(conditions));
+        var filtersPredicate = queryFilter.createPredicate(List.of(filterGroup));
+        cq.where(filtersPredicate);
+        TypedQuery<User> tq = em.createQuery(cq);
+        List<User> items = tq.getResultList();
+        assertTrue(items.size() == 1);
+
+    }
+
+    @Test
+    public void testQueryFilterCompoud() {
+
+        CriteriaBuilder cb = this.em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        var queryFilter = new QueryFilter<>(cb, root, null);
+
+        var filterGroup = new FilterGroupInput();
+        var filterCompound = new FilterCompoundConditionsInput();
         var conditions = new FilterConditionInput();
         var filterValue = new FilterValue();
         filterValue.setMany(List.of("1"));

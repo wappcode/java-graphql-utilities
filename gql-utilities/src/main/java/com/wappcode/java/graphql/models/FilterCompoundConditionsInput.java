@@ -2,51 +2,33 @@ package com.wappcode.java.graphql.models;
 
 import java.util.List;
 
-public class FilterGroupInput {
-    FilterLogic groupLogic;
+import com.wappcode.java.graphql.models.FilterLogic;
+
+public class FilterCompoundConditionsInput {
     FilterLogic conditionsLogic;
     List<FilterConditionInput> conditions;
     List<FilterCompoundConditionsInput> compoundConditions;
 
-    public FilterGroupInput(List<FilterConditionInput> conditions,
-            List<FilterCompoundConditionsInput> compoundConditions, FilterLogic groupLogic,
+    public FilterCompoundConditionsInput(List<FilterConditionInput> conditions,
+            List<FilterCompoundConditionsInput> compoundConditions,
             FilterLogic conditionsLogic) {
-        this.groupLogic = groupLogic;
         this.conditionsLogic = conditionsLogic;
         this.conditions = conditions;
         this.compoundConditions = compoundConditions;
     }
 
-    public FilterGroupInput(List<FilterConditionInput> conditions, FilterLogic groupLogic,
-            FilterLogic conditionsLogic) {
-        this.groupLogic = groupLogic;
+    public FilterCompoundConditionsInput(List<FilterConditionInput> conditions, FilterLogic conditionsLogic) {
         this.conditionsLogic = conditionsLogic;
         this.conditions = conditions;
     }
 
-    public FilterGroupInput(List<FilterConditionInput> conditions, FilterLogic conditionsLogic) {
-        this.conditionsLogic = conditionsLogic;
+    public FilterCompoundConditionsInput(List<FilterConditionInput> conditions) {
         this.conditions = conditions;
-        this.groupLogic = FilterLogic.AND;
-    }
-
-    public FilterGroupInput(List<FilterConditionInput> conditions) {
-        this.conditions = conditions;
-        this.groupLogic = FilterLogic.AND;
         this.conditionsLogic = FilterLogic.AND;
     }
 
-    public FilterGroupInput() {
-        this.groupLogic = FilterLogic.AND;
+    public FilterCompoundConditionsInput() {
         this.conditionsLogic = FilterLogic.AND;
-    }
-
-    public FilterLogic getGroupLogic() {
-        return groupLogic;
-    }
-
-    public void setGroupLogic(FilterLogic groupLogic) {
-        this.groupLogic = groupLogic;
     }
 
     public FilterLogic getConditionsLogic() {

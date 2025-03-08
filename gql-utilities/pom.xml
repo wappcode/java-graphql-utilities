@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>gql-utilities</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT_2</version>
 
     <name>com.wappcode.java.graphql:gql-utilities</name>
     <url>https://github.com/wappcode/java-graphql-utilities</url>

@@ -2,10 +2,15 @@ package com.wappcode.java.graphql.library;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.wappcode.java.graphql.models.FilterCompoundConditionsInput;
 import com.wappcode.java.graphql.models.FilterConditionInput;
 import com.wappcode.java.graphql.models.FilterGroupInput;
 import com.wappcode.java.graphql.models.FilterLogic;
@@ -52,9 +57,42 @@ public class QueryFilter<T> {
 
         FilterLogic conditionsLogic = filterGroup.getConditionsLogic();
         Predicate groupPredicate;
-        // List<Predicate> predicates = Collections.emptyList();
-        List<Predicate> predicates = filterGroup.getConditions().stream()
+        List<FilterConditionInput> conditionInputs = filterGroup.getConditions() == null ? new ArrayList<>()
+                : filterGroup.getConditions();
+        List<FilterCompoundConditionsInput> compoundConditionsInputs = filterGroup.getCompoundConditions() == null
+                ? new ArrayList<>()
+                : filterGroup.getCompoundConditions();
+        List<Predicate> conditionsPredicates = conditionInputs.stream()
                 .map(condition -> createConditionPredicate(condition)).toList();
+        List<Predicate> compounPredicates = compoundConditionsInputs.stream()
+                .map(condition -> createCompoudConditionsPredicate(condition)).toList();
+
+        List<Predicate> predicates = Stream.concat(conditionsPredicates.stream(), compounPredicates.stream())
+                .collect(Collectors.toList());
+        if (conditionsLogic == FilterLogic.OR) {
+            groupPredicate = cb.or(predicates.toArray(new Predicate[0]));
+        } else {
+            groupPredicate = cb.and(predicates.toArray(new Predicate[0]));
+        }
+        return groupPredicate;
+    }
+
+    private Predicate createCompoudConditionsPredicate(FilterCompoundConditionsInput filterCompoundCondition) {
+        FilterLogic conditionsLogic = filterCompoundCondition.getConditionsLogic();
+        Predicate groupPredicate;
+        List<FilterConditionInput> conditionInputs = filterCompoundCondition.getConditions() == null ? new ArrayList<>()
+                : filterCompoundCondition.getConditions();
+        List<FilterCompoundConditionsInput> compoundConditionsInputs = filterCompoundCondition
+                .getCompoundConditions() == null
+                        ? new ArrayList<>()
+                        : filterCompoundCondition.getCompoundConditions();
+        List<Predicate> conditionsPredicates = conditionInputs.stream()
+                .map(condition -> createConditionPredicate(condition)).toList();
+        List<Predicate> compounPredicates = compoundConditionsInputs.stream()
+                .map(condition -> createCompoudConditionsPredicate(condition)).toList();
+
+        List<Predicate> predicates = Stream.concat(conditionsPredicates.stream(), compounPredicates.stream())
+                .collect(Collectors.toList());
         if (conditionsLogic == FilterLogic.OR) {
             groupPredicate = cb.or(predicates.toArray(new Predicate[0]));
         } else {
