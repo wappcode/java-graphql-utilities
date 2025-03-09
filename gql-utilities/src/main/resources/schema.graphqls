@@ -46,10 +46,17 @@ input FilterConditionInput {
   value: FilterValue!
   onJoinedProperty: String
 }
+input FilterCompoundConditionsInput {
+  groupLogic: FilterLogic = AND
+  conditionsLogic: FilterLogic = AND
+  conditions: [FilterConditionInput]
+  compoundConditions:[FilterCompoundConditionsInput]
+}
 input FilterGroupInput {
   groupLogic: FilterLogic = AND
   conditionsLogic: FilterLogic = AND
-  conditions: [FilterConditionInput]!
+  conditions: [FilterConditionInput]
+  compoundConditions:[FilterCompoundConditionsInput]
 }
 enum SortType {
   ASC
