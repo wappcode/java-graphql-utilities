@@ -5,7 +5,7 @@
 
 	<groupId>com.wappcode.java.graphql</groupId>
 	<artifactId>graphql-parent</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<packaging>pom</packaging> <!-- Parent projects use 'pom' packaging -->
 
 	<modules>
@@ -30,6 +30,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 </project>

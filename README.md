@@ -2,8 +2,11 @@
 
 Leer todo el documento antes de iniciar el proceso de deploy
 
+NOTA: El último despliegue se hizo modificando el pom.xml de la carpeta gql-utilities y ejecutando los comandos dese esa carpeta sin incluir -pl gql-utilities -am  (Solo graphql-app se puede ejecutar)
+
 ./mvnw clean
 ./mvnw compile o ./mvnw install
+./mvnw clean install -pl gql-utilities -am (para instalar la libreria gql-utilities)
 
 Agregar accesos y claves de la cuenta del repositorio ossrh
 ver instrucciones para obtener el token (https://central.sonatype.org/publish/generate-token/)
@@ -24,10 +27,13 @@ Importante escribir el comando con la versión que corresponda
 
 ./mvnw versions:set -DnewVersion=1.0.8 -pl gql-utilities -am
 
-El siguiente comando hace el despligue y el release
+El siguiente comando hace el despligue y el release 
 
-./mvnw clean deploy -P release -pl gql-utilities -am
-./mvnw clean deploy -Dgpg.passprhase="gpg_prhasse" -P release -pl gql-utilities -X
+./mvnw clean deploy -DperformRelease=true -P release -pl gql-utilities -am (Pide la contraseña o clave gpg)
+
+alternamtivamente asignado la contraseña al comando
+
+./mvnw clean deploy -DperformRelease=true -Dgpg.passprhase="gpg_prhasse" -P release -pl gql-utilities -X
 
 Si hay error de gpg: signing failed: Inappropriate ioctl for device
 
