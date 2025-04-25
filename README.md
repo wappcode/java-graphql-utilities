@@ -29,11 +29,11 @@ Importante escribir el comando con la versión que corresponda
 
 El siguiente comando hace el despligue y el release 
 
-./mvnw clean deploy -DperformRelease=true -P release -pl gql-utilities -am (Pide la contraseña o clave gpg)
+./mvnw clean deploy -P release -pl gql-utilities -am (Pide la contraseña o clave gpg)
 
 alternamtivamente asignado la contraseña al comando
 
-./mvnw clean deploy -DperformRelease=true -Dgpg.passprhase="gpg_prhasse" -P release -pl gql-utilities -X
+./mvnw clean deploy -Dgpg.passprhase="gpg_prhasse" -P release -pl gql-utilities -X
 
 Si hay error de gpg: signing failed: Inappropriate ioctl for device
 
