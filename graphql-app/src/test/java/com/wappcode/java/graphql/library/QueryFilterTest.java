@@ -2,6 +2,7 @@ package com.wappcode.java.graphql.library;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ import com.wappcode.java.graphql.models.FilterGroupInput;
 import com.wappcode.java.graphql.models.FilterLogic;
 import com.wappcode.java.graphql.models.FilterOperator;
 import com.wappcode.java.graphql.models.FilterValue;
+import com.wappcode.java.graphql.models.JoinInput;
+import com.wappcode.java.graphql.models.JoinType;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -157,6 +160,39 @@ public class QueryFilterTest {
         List<User> items = tq.getResultList();
 
         assertTrue(items.size() == 4);
+
+    }
+
+    @Test
+    public void testQueryFilterJoin() {
+
+        CriteriaBuilder cb = this.em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        var joins = new QueryJoins<>(root);
+        var joinsInputs = new ArrayList<JoinInput>();
+        var joinGroup = new JoinInput();
+        joinGroup.setJoinType(JoinType.INNER);
+        joinGroup.setProperty("group");
+        joinsInputs.add(joinGroup);
+        joins.addJoins(joinsInputs);
+        var filterJoins = joins.getJoins();
+        var queryFilter = new QueryFilter<>(cb, root, filterJoins);
+
+        var filterGroup = new FilterGroupInput();
+        var conditions = new FilterConditionInput();
+        var filterValue = new FilterValue();
+        filterValue.setSingle("%México%");
+        conditions.setFilterOperator(FilterOperator.LIKE);
+        conditions.setProperty("name");
+        conditions.setOnJoinedProperty("group");
+        conditions.setValue(filterValue);
+        filterGroup.setConditions(List.of(conditions));
+        var filtersPredicate = queryFilter.createPredicate(List.of(filterGroup));
+        cq.where(filtersPredicate);
+        TypedQuery<User> tq = em.createQuery(cq);
+        List<User> items = tq.getResultList();
+        assertTrue(items.size() == 2);
 
     }
     // TODO: Add test to compare dates and numbers with between and greater than,

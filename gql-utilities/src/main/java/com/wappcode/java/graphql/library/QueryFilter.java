@@ -106,9 +106,16 @@ public class QueryFilter<T> {
         From<?, ?> from = getFrom(condition.getOnJoinedProperty());
         String property = condition.getProperty();
         String rawValue = condition.getValue().getSingle();
+        // TODO: corregir attribute
 
         Attribute<?, ?> attribute = root.getModel().getAttribute(property);
-        Class<?> attributeType = attribute.getJavaType();
+        Class<?> attributeType;
+        if (condition.getOnJoinedProperty() != null) {
+            attributeType = from.getModel().getBindableJavaType();
+        } else {
+            attributeType = attribute.getJavaType();
+
+        }
         if (rawValue == null) {
             rawValue = "";
         }
