@@ -25,7 +25,7 @@ gpg --list-secret-keys --keyid-format=long
 El siguiente comando cambia la versión.
 Importante escribir el comando con la versión que corresponda
 
-./mvnw versions:set -DnewVersion=1.0.8 -pl gql-utilities -am
+./mvnw versions:set -DnewVersion=1.0.11 -pl gql-utilities -am
 
 El siguiente comando hace el despligue y el release 
 
