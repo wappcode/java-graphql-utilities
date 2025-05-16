@@ -101,7 +101,7 @@ public class QueryFilter<T> {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Predicate createConditionPredicate(FilterConditionInput condition) {
+    private Predicate createConditionPredicate(FilterConditionInput condition) throws IllegalArgumentException {
         FilterOperator operator = condition.getFilterOperator();
         From<?, ?> from = getFrom(condition.getOnJoinedProperty());
         String property = condition.getProperty();
@@ -110,56 +110,93 @@ public class QueryFilter<T> {
 
         Class<?> attributeType;
         if (condition.getOnJoinedProperty() != null) {
-            attributeType = from.getModel().getBindableJavaType();
+            attributeType = from.get(property).getJavaType();
         } else {
             Attribute<?, ?> attribute = root.getModel().getAttribute(property);
             attributeType = attribute.getJavaType();
 
         }
-        if (rawValue == null) {
-            rawValue = "";
+        Object value = null;
+        if (rawValue != null) {
+            value = standardizeFilterValue(rawValue, attributeType);
         }
         List<String> rawvalues = condition.getValue().getMany();
-        if (rawvalues == null) {
-            rawvalues = List.of("");
+        List<?> values = null;
+        if (rawvalues != null) {
+            values = rawvalues.stream()
+                    .map(v -> (standardizeFilterValue(v, attributeType)))
+                    .toList();
         }
-        var value = standardizeFilterValue(rawValue, attributeType);
 
-        List<?> values = rawvalues.stream()
-                .map(v -> (standardizeFilterValue(v, attributeType)))
-                .toList();
         if (operator == FilterOperator.LIKE) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for LIKE operator should be a String");
+            }
             return cb.like(from.get(property), (String) value);
         }
         if (operator == FilterOperator.NOT_LIKE) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for NOT LIKE operator should be a String");
+            }
             return cb.notLike(from.get(property), (String) value);
         }
         if (operator == FilterOperator.EQUAL) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for EQUAL operator should not be null");
+            }
             return cb.equal(from.get(property), value);
         }
         if (operator == FilterOperator.NOT_EQUAL) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for NOT EQUAL operator should not be null");
+            }
             return cb.notEqual(from.get(property), value);
         }
         if (operator == FilterOperator.IN) {
+            if (values == null || values.isEmpty()) {
+                throw new IllegalArgumentException("Value for IN operator should not be null or empty");
+            }
             return from.get(property).in(values);
         }
         if (operator == FilterOperator.NOT_IN) {
+            if (values == null || values.isEmpty()) {
+                throw new IllegalArgumentException("Value for NOT IN operator should not be null or empty");
+            }
             return cb.not(from.get(property).in(values));
         }
         if (operator == FilterOperator.BETWEEN) {
+            if (values == null || values.size() != 2) {
+                throw new IllegalArgumentException("Value for BETWEEN operator should have two values");
+            }
+            if (values.get(0) == null || values.get(1) == null) {
+                throw new IllegalArgumentException("Value for BETWEEN operator should not be null");
+            }
+
             return cb.between(from.get(property), (Comparable) values.get(0),
                     (Comparable) values.get(1));
         }
         if (operator == FilterOperator.GREATER_THAN) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for GREATER THAN operator should not be null");
+            }
             return cb.greaterThan(from.get(property), (Comparable) value);
         }
         if (operator == FilterOperator.GREATER_EQUAL_THAN) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for GREATER EQUAL THAN operator should not be null");
+            }
             return cb.greaterThanOrEqualTo(from.get(property), (Comparable) value);
         }
         if (operator == FilterOperator.LESS_THAN) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for LESS THAN operator should not be null");
+            }
             return cb.lessThan(from.get(property), (Comparable) value);
         }
         if (operator == FilterOperator.LESS_EQUAL_THAN) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value for LESS EQUAL THAN operator should not be null");
+            }
             return cb.lessThanOrEqualTo(from.get(property), (Comparable) value);
         }
 
