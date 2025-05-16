@@ -46,4 +46,12 @@ public class JoinInput {
         this.joinedProperty = joinedProperty;
     }
 
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
 }
